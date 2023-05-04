@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    stages {
+        stage("Docker check pre-requisites") {
+            steps {
+                sh '''
+                docker version
+                docker-compose version
+                '''
+            }
+        }
+        stage("run docker compose") {
+            steps {
+                script{
+                    def remote = [:]
+                    remote.user = 'ubuntu'
+                    remote.host = '<private ip of the webserver instance>'
+                    remote.name = 'ubuntu'
+                    remote.identifyFile = 'test-delete-console.pem'
+                    remote.allowAnyHosts = 'true'
+                    sshCommand remote: remote, command: 'git clone https://github.com/shashankjainTM/deploy-test-application-cyware-assignment.git'
+                    sshCommand remote: remote, command: 'cd deploy-test-application-cyware-assignment'
+                    sshCommand remote: remote, command: 'docker-compose up -d'
+                }
+                
+            }
+        }
+    }
+}
