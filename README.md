@@ -60,3 +60,11 @@ $terraform apply -target aws_vpc.vpc-assignment
  Serve http://web-lb-959843231.eu-central-1.elb.amazonaws.com/hello
 
 - `Can change based on the resource creation, this is the dns name of the Application load balancer`
+
+## Jenkins File
+
+The Jenkinsfile is a sample groovy script to represent how to run docker compose to bring up the webserver.
+
+- In the above example we have deployed the webserver using the ec2_instance user_data.sh file initially and can also be updated via jenkins file by running the script in an instance running in public subnet and having allowed traffic from the same instance to the private subnet.
+- The jenkins instance should have private key to connect to the instance in private.
+- The script will do SSH into the private instance, clone the repo to pull the jenkinsfile and then run docker-compose up command.
